@@ -10,8 +10,7 @@
 		"cargoWeight": "https://uri.fiware.org/ns/data-models#cargoWeight",
 		"category": {
 			"@id": "https://uri.fiware.org/ns/data-models#category",
-			"@type": "@id",
-			"@container": "@list"
+			"@type": "@id"
 		},
 		"color": "https://uri.fiware.org/ns/data-models#color",
 		"dataProvider": "https://uri.fiware.org/ns/data-models#dataProvider",
@@ -49,19 +48,16 @@
 		"storedWasteCode": "https://uri.fiware.org/ns/data-models#storedWasteCode",
 		"storedWasteKind": {
 			"@id": "https://uri.fiware.org/ns/data-models#storedWasteKind",
-			"@type": "@id",
-			"@container": "@list"
+			"@type": "@id"
 		},
 		"storedWasteOrigin": {
 			"@id": "https://uri.fiware.org/ns/data-models#storedWasteOrigin",
-			"@type": "@id",
-			"@container": "@list"
+			"@type": "@id"
 		},
 		"temperature": "https://uri.fiware.org/ns/data-models#temperature",
 		"features": {
 			"@id": "https://uri.fiware.org/ns/data-models#features",
-			"@type": "@id",
-			"@container": "@list"
+			"@type": "@id"
 		},
 		"insertHolesNumber": "https://uri.fiware.org/ns/data-models#insertHolesNumber",
 		"areaServed": "https://schema.org/areaServed",
