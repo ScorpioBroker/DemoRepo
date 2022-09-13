@@ -1,4 +1,4 @@
-ame: Release native windows version
+name: Release native windows version
 on: [push,pull_request]
 jobs:
   build-windows-aaio:
