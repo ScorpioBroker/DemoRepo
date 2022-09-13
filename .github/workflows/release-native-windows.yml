@@ -1,0 +1,23 @@
+ame: Release native windows version
+on: [push,pull_request]
+jobs:
+  build-windows-aaio:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2     
+      - name: Configure Pagefile
+        uses: al-cheb/configure-pagefile-action@v1.2
+        with:
+          minimum-size: 16GB
+          maximum-size: 16GB
+          disk-root: "C:"
+      - name: Setup GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          version: '22.1.0'
+          java-version: '17'
+          components: 'native-image'
+      - name: Start kafka and postgis
+        shell: pwsh
+        run: |
+          docker-compose -f docker-compose-postgis.yml up 
