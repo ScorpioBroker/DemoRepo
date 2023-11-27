@@ -1,0 +1,81 @@
+version: '3'
+
+services:
+#  testserver:
+#    image: testserver
+#    ports:
+#      - "55551:55551"
+  nifireg:
+    image: apache/nifi-registry
+    ports:
+      - "18080:18080"
+  nifi:
+    image: apache/nifi
+    ports: 
+      - "8443:8443"
+      - "8080:8080"
+    environment:
+      ENTITY_TYPES: Medication,https://fiware.github.io/data-models/context.jsonld,Patient,https://smartdatamodels.org/dataModel.Hl7/Patient,MedicationAdministration,https://smartdatamodels.org/dataModel.Hl7/MedicationAdministration,MedicationStatement,MedicationDispense,Observation,Media
+      #AT_CONTEXT: https://fiware.github.io/data-models/context.jsonld
+      FORCE_ARRAY: performer
+      NGSILD_HOST: http://scorpio:9090
+      NOTIFICATION_PATH: notify
+      NOTIFICATION_PORT: 4444
+      NOTIFICATION_HOST: http://nifi
+      HL7_HOST: http://testserver:55551
+      TEMP_INTERVAL: 20
+      NIFI_REG: http://nifireg:18080
+      MY_HOST: http://nifi:8080
+      ########## JVM ##########
+      
+      # -Xms
+      #   The initial JVM heap size.
+      #NIFI_JVM_HEAP_INIT: 512m
+
+      # -Xmx
+      #   The maximum JVM heap size.
+      #NIFI_JVM_HEAP_MAX: 512m
+      
+      # -Xdebug
+      #   The JVM Debugger can be enabled by setting this environment variable to any value.
+      #NIFI_JVM_DEBUGGER: ''
+
+
+
+      ########## Web ##########
+
+      # nifi.web.http.host
+      NIFI_WEB_HTTP_HOST: '0.0.0.0'
+      
+      # nifi.web.http.port
+      #   HTTP Port
+      NIFI_WEB_HTTP_PORT: 8080
+    volumes:
+      - ./NiFi_Flowtemporal2nd.json:/home/nifi/NGSILDHL7Flow.json
+      - ./loadtemplate.sh:/home/nifi/loadtemplate.sh
+      - ./download:/home/nifi/download
+      - ./mapping.csv:/home/nifi/mapping.csv
+      #- ./load:/home/nifi/load
+      #- ./original:/home/nifi/original
+    entrypoint: ["bash", "/home/nifi/loadtemplate.sh"]
+    depends_on:
+      - nifireg
+      - scorpio
+  postgres:
+    image: postgis/postgis
+    ports:
+      - "5432"
+    environment:
+      POSTGRES_USER: ngb
+      POSTGRES_PASSWORD: ngb
+      POSTGRES_DB: ngb
+    logging:
+      driver: none
+#    volumes:
+#      - ./mylocaldbfolder:/var/lib/postgresql/data
+  scorpio:
+    image: scorpiobroker/all-in-one-runner:java-4.1.10
+    ports:
+      - "9090:9090"
+    depends_on:
+      - postgres
